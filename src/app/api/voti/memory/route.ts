@@ -48,12 +48,14 @@ export async function POST(request: Request) {
     const { uid, userName, query } = body;
     const trimmedQuery = query?.trim();
 
-    if (!isValidUid(uid) || !trimmedQuery) {
+    if (!isValidUid(uid ?? null) || !trimmedQuery) {
       return NextResponse.json(
         { error: "A valid uid and query are required" },
         { status: 400 }
       );
     }
+
+    const safeUid = uid ?? "";
 
     if (trimmedQuery.length > MAX_QUERY_LENGTH) {
       return NextResponse.json(
@@ -64,7 +66,7 @@ export async function POST(request: Request) {
 
     // Call the memory-aware AI service
     const safeUserName = typeof userName === "string" ? userName.slice(0, 80) : "Voter";
-    const response = await aiService.askVoti(uid, safeUserName, trimmedQuery);
+    const response = await aiService.askVoti(safeUid, safeUserName, trimmedQuery);
 
     // Clean infographic tag from visible text
     const cleanText = response.text.replace(/\[INFOGRAPHIC:.*?\]/g, "").trim();
