@@ -9,8 +9,8 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
-import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
-import { getPerformance } from "firebase/performance";
+import { getAnalytics } from "firebase/analytics";
+import { Performance, getPerformance } from "firebase/performance";
 import type { Analytics } from "firebase/analytics";
 import type { FirebasePerformance } from "firebase/performance";
 
@@ -59,7 +59,6 @@ async function getPerformanceInstance(): Promise<FirebasePerformance | null> {
   if (typeof window === "undefined") return null;
   if (performanceInstance) return performanceInstance;
   try {
-    // Performance doesn't have isSupported() method, so we just try to initialize it
     performanceInstance = getPerformance(app);
   } catch {
     // Performance instrumentation blocked or unsupported
