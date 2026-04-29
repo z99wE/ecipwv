@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stripe-indigo: #000080;
+  --color-stripe-saffron: #FF9933;
+  --color-stripe-green: #138808;
+  --color-stripe-dark: #0a2540;
+  --color-stripe-slate: #425466;
+  
+  --shadow-stripe: 0 7px 14px 0 rgba(60, 66, 87, 0.08), 0 3px 6px 0 rgba(0, 0, 0, 0.12);
+  --shadow-stripe-lg: 0 15px 35px 0 rgba(60, 66, 87, 0.08), 0 5px 15px 0 rgba(0, 0, 0, 0.12);
+  --shadow-stripe-xl: 0 50px 100px -20px rgba(50, 50, 93, 0.25), 0 30px 60px -30px rgba(0, 0, 0, 0.3);
+  --font-sans: "Inter", "Geist Sans", system-ui, sans-serif;
+}
+
+/* ─── Design Tokens ─── */
+:root {
+  --bg: #020617;
+  --bg-rgb: 2, 6, 23;
+  --bg-subtle: #0f172a;
+  --bg-muted: #1e293b;
+  --border: #1e293b;
+  --border-subtle: rgba(30, 41, 59, 0.8);
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --card-bg: #111827;
+  --card-border: rgba(51, 65, 85, 0.5);
+  --nav-bg: rgba(2, 6, 23, 0.95);
+  --section-dark-bg: #020210;
+  --section-dark-text: #ffffff;
+
+  /* Tricolor Brands */
+  --saffron: #FF9933;
+  --white: #FFFFFF;
+  --green: #138808;
+  --indigo: #000080;
+}
+
+.dark {
+  /* Keep same as root for consistency if class is added */
+  --bg: #020617;
+  --bg-rgb: 2, 6, 23;
+  --bg-subtle: #0f172a;
+  --bg-muted: #1e293b;
+  --border: #1e293b;
+  --border-subtle: rgba(30, 41, 59, 0.8);
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --card-bg: #111827;
+  --card-border: rgba(51, 65, 85, 0.5);
+  --nav-bg: rgba(2, 6, 23, 0.95);
+  --section-dark-bg: #020210;
+  --section-dark-text: #ffffff;
+}
+
+html {
+  font-size: var(--font-size-adjust);
+  filter: grayscale(var(--grayscale-filter)) contrast(var(--contrast-adjust));
+  letter-spacing: var(--letter-spacing-adjust);
+}
+
+/* ─── Accessibility Tools Classes ─── */
+.a11y-bigger-text {
+  font-size: 110% !important;
+}
+
+.a11y-text-spacing {
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+  line-height: 1.6 !important;
+}
+
+.a11y-dyslexia, .a11y-dyslexia * {
+  font-family: "Inter", "Geist Sans", Arial, sans-serif !important;
+}
+
+.a11y-invert {
+  filter: invert(100%) hue-rotate(180deg) !important;
+  background-color: #000 !important;
+}
+.a11y-invert img, .a11y-invert video {
+  filter: invert(100%) hue-rotate(180deg) !important; /* Re-invert images */
+}
+
+.a11y-highlight-links a, .a11y-highlight-links button {
+  background-color: #ffeb3b !important;
+  color: #000 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+  border-radius: 4px;
+}
+
+.a11y-big-cursor, .a11y-big-cursor * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="2"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.42a.5.5 0 0 0 .35-.85L5.5 3.21z"/></svg>') 0 0, auto !important;
+}
+
+.a11y-hide-images img, .a11y-hide-images svg {
+  visibility: hidden !important;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    @apply antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4 {
+    @apply tracking-tight font-bold;
+  }
+
+  /* Screen reader utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+@layer components {
+  .card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    @apply rounded-2xl shadow-sm;
+  }
+
+  .stripe-border {
+    border: 1px solid var(--border-subtle);
+  }
+
+  .glass-card {
+    background-color: color-mix(in srgb, var(--card-bg) 80%, transparent);
+    @apply backdrop-blur-md border shadow-stripe;
+    border-color: var(--card-border);
+  }
+
+  .btn-stripe {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold transition-all active:scale-95 cursor-pointer;
+  }
+
+  .btn-stripe-primary {
+    @apply bg-[#000080] text-white hover:bg-[#5346e0] shadow-stripe hover:shadow-stripe-lg;
+  }
+
+  .btn-stripe-secondary {
+    background-color: var(--card-bg);
+    color: #000080;
+    border: 1px solid var(--border);
+    @apply shadow-stripe hover:shadow-stripe-lg;
+  }
+}
+
+/* ─── Wave animation for Voti voice ─── */
+@keyframes wave-bar {
+  0%, 100% { height: 4px; }
+  50% { height: var(--peak, 24px); }
+}
+
+.wave-bar {
+  animation: wave-bar 1.2s ease-in-out infinite;
+  border-radius: 9999px;
+  background: #000080;
+  width: 3px;
+  min-height: 4px;
+}
+
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-700 rounded-full; }
+
+/* ─── Smooth transitions ─── */
+* { transition-property: background-color, border-color, color; transition-duration: 0.2s; }
+
+.text-election-gradient {
+  background: linear-gradient(to right, #FF9933 0%, #3b82f6 50%, #138808 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* ─── Kill Next.js Dev Overlay / Turbopack Indicator ─── */
+[data-nextjs-toast], 
+[data-nextjs-dialog-overlay], 
+[data-nextjs-portal],
+.nextjs-static-indicator-base,
+#__next-build-watcher,
+#nextjs-dev-overlay,
+div[class*="nextjs-dev-overlay"],
+button[class*="nextjs-dev-overlay"],
+[id*="__next-build-watcher"],
+[class*="NextJsStaticIndicator"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}

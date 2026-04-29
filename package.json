@@ -1,0 +1,50 @@
+{
+  "name": "electiq-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "audit:a11y": "lhci autorun"
+  },
+  "dependencies": {
+    "@google-cloud/logging": "^11.2.1",
+    "@google-cloud/secret-manager": "^6.1.1",
+    "@google-cloud/trace-agent": "^8.0.0",
+    "@google/generative-ai": "^0.24.1",
+    "@types/three": "^0.184.0",
+    "cheerio": "^1.2.0",
+    "clsx": "^2.1.1",
+    "firebase": "^12.12.1",
+    "firebase-admin": "^13.8.0",
+    "framer-motion": "^12.38.0",
+    "google-auth-library": "^10.6.2",
+    "lucide-react": "^1.11.0",
+    "next": "16.2.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.5.0",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.13.0",
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
+    "playwright": "^1.59.1",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5"
+  }
+}

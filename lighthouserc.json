@@ -1,0 +1,22 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "url": ["http://localhost:3000/"],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "categories:accessibility": ["error", {"minScore": 0.95}],
+        "color-contrast": "error",
+        "aria-roles": "error",
+        "aria-valid-attr": "error",
+        "html-has-lang": "error",
+        "document-title": "error"
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
