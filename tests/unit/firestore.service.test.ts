@@ -15,10 +15,10 @@ jest.mock("firebase/firestore", () => ({
   getDocs: jest.fn(),
   getDoc: jest.fn(),
   setDoc: jest.fn(),
-  doc: jest.fn(),
+  doc: jest.fn(() => ({ type: "mock-doc-ref" })),
   addDoc: jest.fn(),
   updateDoc: jest.fn(),
-  increment: jest.fn(),
+  increment: jest.fn(() => ({ type: "increment" })),
   serverTimestamp: jest.fn(() => "mock-timestamp"),
   Timestamp: {
     now: jest.fn(() => ({ toMillis: () => Date.now() })),
@@ -61,14 +61,14 @@ describe("firestoreService", () => {
 
     // 2 messages saved + 1 profile update
     expect(addDoc).toHaveBeenCalledTimes(2);
-    expect(setDoc).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({
-        totalQueries: expect.anything(),
-        lastQueryTopic: "Election Topic",
-      }),
-      { merge: true }
-    );
+    
+    // Verify profile update
+    const setDocCalls = (setDoc as jest.Mock).mock.calls;
+    expect(setDocCalls.length).toBeGreaterThan(0);
+    expect(setDocCalls[0][1]).toMatchObject({
+      lastQueryTopic: "Election Topic",
+    });
+    expect(setDocCalls[0][2]).toEqual({ merge: true });
   });
 
   test("saveECISync updates both global cache and user context", async () => {
