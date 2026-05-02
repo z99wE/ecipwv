@@ -59,6 +59,8 @@ export const authService = {
   /**
    * Exclusive Google OAuth implementation.
    * Opens Google account picker popup, then upserts a VoterProfile in Firestore.
+   * 
+   * @returns AuthResult containing user info and profile
    */
   loginWithGoogle: async (): Promise<AuthResult> => {
     const result = await signInWithPopup(auth, googleProvider);
@@ -130,6 +132,10 @@ export const authService = {
 
   /**
    * Login with Email and Password.
+   * 
+   * @param email - User email
+   * @param pass - User password
+   * @returns AuthResult
    */
   loginWithEmail: async (email: string, pass: string): Promise<AuthResult> => {
     const result = await signInWithEmailAndPassword(auth, email, pass);
@@ -160,6 +166,11 @@ export const authService = {
 
   /**
    * Register with Email and Password.
+   * 
+   * @param email - User email
+   * @param pass - User password
+   * @param name - Display name
+   * @returns AuthResult
    */
   registerWithEmail: async (email: string, pass: string, name: string): Promise<AuthResult> => {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
@@ -194,7 +205,12 @@ export const authService = {
     return onAuthStateChanged(auth, callback);
   },
 
-  /** Fetch a voter's Firestore profile by UID */
+  /** 
+   * Fetch a voter's Firestore profile by UID.
+   * 
+   * @param uid - The unique identifier of the voter
+   * @returns The VoterProfile or null if not found
+   */
   getCurrentVoterProfile: async (uid: string): Promise<VoterProfile | null> => {
     const userRef = doc(db, "voters", uid);
     const userSnap = await getDoc(userRef);

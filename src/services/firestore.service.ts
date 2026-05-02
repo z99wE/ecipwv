@@ -29,6 +29,7 @@ import {
   DocumentData,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { VoterProfile } from "./auth.service";
 
 // ─── TypeScript Interfaces ───────────────────────────────────────────────────
 
@@ -61,7 +62,11 @@ export const firestoreService = {
 
   /**
    * Fetch the N most recent Voti chat messages for a voter.
-   * Ordered ascending (oldest first) for chat history display.
+   * Messages are ordered descending by time and then reversed for correct chat display.
+   * 
+   * @param uid - The unique identifier of the voter
+   * @param limitCount - Max number of messages to retrieve (default 10)
+   * @returns Array of ChatMessage objects
    */
   getVotiHistory: async (
     uid: string,
@@ -178,10 +183,16 @@ export const firestoreService = {
     return topics;
   },
 
-  /** Update a voter's profile field(s) */
+  /**
+   * Update a voter's profile with specific key-value pairs.
+   * Merges with existing data.
+   * 
+   * @param uid - The unique identifier of the voter
+   * @param updates - Partial object containing fields to update
+   */
   updateVoterProfile: async (
     uid: string,
-    updates: Partial<Record<string, unknown>>
+    updates: Partial<VoterProfile>
   ): Promise<void> => {
     const voterRef = doc(db, "voters", uid);
     await updateDoc(voterRef, updates);
@@ -191,6 +202,10 @@ export const firestoreService = {
 
   /**
    * Save ECI sync result to a global cache and optionally update user context.
+   * The latest sync is stored at `election_data/latest_sync`.
+   * 
+   * @param data - The ECI sync payload including stats
+   * @param uid - Optional voter UID to record who performed the sync
    */
   saveECISync: async (data: ECISyncPayload, uid?: string): Promise<void> => {
     // Global cache for the dashboard
@@ -215,7 +230,9 @@ export const firestoreService = {
   },
 
   /**
-   * Get the latest ECI sync data.
+   * Retrieve the most recent global ECI sync data.
+   * 
+   * @returns The latest ElectionDataRecord or null if not found
    */
   getECISync: async (): Promise<ElectionDataRecord | null> => {
     const docRef = doc(db, "election_data", "latest_sync");
@@ -227,7 +244,10 @@ export const firestoreService = {
   },
 
   /**
-   * Read the user's last cached ECI context from their profile.
+   * Read the voter's specific cached ECI context from their profile.
+   * 
+   * @param uid - The unique identifier of the voter
+   * @returns Context object or null
    */
   getUserECIContext: async (uid: string): Promise<Record<string, unknown> | null> => {
     const voterRef = doc(db, "voters", uid);

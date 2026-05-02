@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { firestoreService } from "@/services/firestore.service";
 
 // ─── Role: Voti — Official Election Assistant ─────────────────
 const SYSTEM_PROMPT = `
@@ -109,6 +110,23 @@ export async function POST(request: Request) {
 
     if (!text) {
       text = getStaticAnswer(query || "election");
+    }
+
+    // Persist the exchange to Firestore server-side for authenticated users
+    if (uid && uid !== "anonymous") {
+      try {
+        const topicMatch = text.match(/\[INFOGRAPHIC:\s*(.*?)\]/);
+        const topic = topicMatch ? topicMatch[1] : (query || "Voice Interaction").slice(0, 50);
+        
+        await firestoreService.saveVotiExchange(
+          uid,
+          query || "[Voice Input]",
+          text,
+          topic
+        );
+      } catch (saveError) {
+        console.error("[Voti] Failed to save history server-side:", saveError);
+      }
     }
 
     return NextResponse.json({ 
