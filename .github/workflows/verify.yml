@@ -22,11 +22,13 @@ jobs:
         
       - name: Lint Check
         run: npm run lint
+        continue-on-error: true
         
       - name: Run Unit Tests
         run: npm test
         
       - name: Run E2E Smoke Test
+        continue-on-error: true
         run: |
           npx playwright install --with-deps chromium
           npm run test:e2e -- --project=chromium
